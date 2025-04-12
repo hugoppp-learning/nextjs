@@ -1,5 +1,5 @@
-import { type Client, createClient } from "@libsql/client";
-import { drizzle } from "drizzle-orm/libsql";
+import { drizzle } from "drizzle-orm/singlestore";
+import mysql from "mysql2/promise";
 
 import { env } from "~/env";
 import * as schema from "./schema";
@@ -9,11 +9,11 @@ import * as schema from "./schema";
  * update.
  */
 const globalForDb = globalThis as unknown as {
-    client: Client | undefined;
+    connection: mysql.Connection;
 };
 
-export const client =
-    globalForDb.client ?? createClient({ url: env.DATABASE_URL });
-if (env.NODE_ENV !== "production") globalForDb.client = client;
+export const connection =
+    globalForDb.connection ?? (await mysql.createConnection(env.DATABASE_URL));
+if (env.NODE_ENV !== "production") globalForDb.connection = connection;
 
-export const db = drizzle(client, { schema });
+export const db = drizzle(connection, { schema });

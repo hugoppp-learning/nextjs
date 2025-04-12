@@ -1,3 +1,4 @@
+"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -20,19 +21,13 @@ import {
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { useTheme } from "next-themes";
-import type { DriveFolder } from "~/lib/mock-data";
+import { type foldersTable } from "~/server/db/schema";
 
 interface HeaderProps {
-    breadcrumbItems: DriveFolder[];
-    navigateUp: () => void;
-    navigateTo: (id: number) => void;
+    breadcrumbItems: (typeof foldersTable.$inferSelect)[];
 }
 
-export function Header({
-    breadcrumbItems,
-    navigateUp,
-    navigateTo,
-}: HeaderProps) {
+export function Header({ breadcrumbItems }: HeaderProps) {
     return (
         <header className="border-b p-4">
             <div className="flex items-center justify-between">
@@ -42,7 +37,7 @@ export function Header({
                             disabled={breadcrumbItems.length === 1}
                             variant="ghost"
                             size="sm"
-                            onClick={navigateUp}
+                            //todo onclick
                             className="mr-1"
                         >
                             <ChevronRight className="h-4 w-4 rotate-180" />
@@ -51,9 +46,7 @@ export function Header({
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() =>
-                                    navigateTo(breadcrumbItems[0]!.id)
-                                }
+                                //todo onclick
                                 className="hover:bg-accent hover:text-accent-foreground font-medium"
                             >
                                 My Drive
@@ -67,7 +60,7 @@ export function Header({
                                     <Button
                                         variant="ghost"
                                         size="sm"
-                                        onClick={() => navigateTo(item.id)}
+                                        //todo onclick
                                         className={`hover:bg-accent hover:text-accent-foreground font-medium ${
                                             index === breadcrumbItems.length - 1
                                                 ? "text-primary"

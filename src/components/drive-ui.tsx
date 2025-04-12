@@ -1,51 +1,21 @@
-"use client";
-
-import { useState } from "react";
 import { Header } from "~/components/header";
 import { FileExplorer } from "~/components/file-explorer";
-import {
-    getFilesInFolder,
-    getFolderById,
-    getFoldersInFolder,
-    getPathToItem,
-} from "~/lib/mock-data";
+import { QUERIES } from "~/server/db/queries";
 
-export function DriveUI() {
-    const [currentFolderId, setCurrentFolderId] = useState<number>(1);
+export async function DriveUI() {
+    const rootId = 2251799813685249;
+    const currentFolderId = rootId;
 
-    const currentFiles = getFilesInFolder(currentFolderId);
-    const currentFolders = getFoldersInFolder(currentFolderId);
+    const currentFiles = await QUERIES.getFiles(currentFolderId);
+    const currentFolders = await QUERIES.getFolders(currentFolderId);
 
     // Get path to current folder
-    const breadcrumbItems = currentFolderId
-        ? getPathToItem(currentFolderId)
-        : [];
-
-    const navigateUp = () => {
-        if (currentFolderId) {
-            const currentFolder = getFolderById(currentFolderId);
-            if (!currentFolder?.parentId) return;
-            setCurrentFolderId(currentFolder.parentId);
-        }
-    };
-
-    // Navigate to a specific point in the breadcrumb
-    const navigateTo = (id: number) => {
-        setCurrentFolderId(id);
-    };
+    const breadcrumbItems = await QUERIES.getBreadcrumbs(currentFolderId);
 
     return (
         <div className="bg-background flex h-screen flex-col">
-            <Header
-                breadcrumbItems={breadcrumbItems}
-                navigateUp={navigateUp}
-                navigateTo={navigateTo}
-            />
-            <FileExplorer
-                files={currentFiles}
-                folders={currentFolders}
-                navigateToFolder={setCurrentFolderId}
-            />
+            <Header breadcrumbItems={breadcrumbItems} />
+            <FileExplorer files={currentFiles} folders={currentFolders} />
         </div>
     );
 }

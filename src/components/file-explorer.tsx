@@ -1,18 +1,15 @@
+"use client";
+
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { FileItem } from "~/components/file-item";
-import type { DriveFile, DriveFolder } from "~/lib/mock-data";
+import { type filesTable, type foldersTable } from "~/server/db/schema";
 
 interface FileExplorerProps {
-    files: DriveFile[];
-    folders: DriveFolder[];
-    navigateToFolder: (folderId: number) => void;
+    files: (typeof filesTable.$inferSelect)[];
+    folders: (typeof foldersTable.$inferSelect)[];
 }
 
-export function FileExplorer({
-    files,
-    folders,
-    navigateToFolder,
-}: FileExplorerProps) {
+export function FileExplorer({ files, folders }: FileExplorerProps) {
     // Group items by type (folders first)
     return (
         <div className="flex-1 overflow-hidden">
@@ -34,26 +31,20 @@ export function FileExplorer({
                                 </tr>
                             </thead>
                             <tbody className="[&_tr:last-child]:border-0">
-                                {folders.map((item) => (
+                                {folders.map((folder) => (
                                     <FileItem
-                                        type="folder"
-                                        key={item.id}
-                                        {...item}
-                                        onClick={() => {
-                                            navigateToFolder(item.id);
+                                        driveItem={{
+                                            type: "folder",
+                                            ...folder,
                                         }}
-                                        viewType="list"
+                                        key={folder.id}
+                                        //todo onclick
                                     />
                                 ))}
-                                {files.map((item) => (
+                                {files.map((file) => (
                                     <FileItem
-                                        type="file"
-                                        key={item.id}
-                                        {...item}
-                                        onClick={() => {
-                                            navigateToFolder(item.id);
-                                        }}
-                                        viewType="list"
+                                        driveItem={{ type: "file", ...file }}
+                                        key={file.id}
                                     />
                                 ))}
                             </tbody>

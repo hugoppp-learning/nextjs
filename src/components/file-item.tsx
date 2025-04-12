@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import {
     File,
     FileArchive,
@@ -11,31 +10,26 @@ import {
     ImageIcon,
 } from "lucide-react";
 
-export interface FileItemProps {
+export type DriveItem = {
+    id: number;
     name: string;
-    type: "folder" | "file";
     size?: string;
-    modified?: string;
-    shared?: boolean;
     url?: string;
-    onClick?: () => void;
-    viewType?: "grid" | "list";
+    type: "folder" | "file";
+};
+
+export interface FileItemProps {
+    driveItem: DriveItem;
+    onFolderClick?: () => void;
 }
 
-export function FileItem({
-    name,
-    type,
-    size,
-    modified,
-    url = "#",
-    onClick,
-    viewType = "grid",
-}: FileItemProps) {
+export function FileItem({ driveItem, onFolderClick }: FileItemProps) {
     const getIcon = () => {
-        if (type === "folder")
+        console.log(driveItem);
+        if (driveItem.name === "folder")
             return <Folder className="h-5 w-5 text-blue-500" />;
 
-        const extension = name.split(".").pop()?.toLowerCase();
+        const extension = driveItem.name.split(".").pop()?.toLowerCase();
         switch (extension) {
             case "txt":
             case "doc":
@@ -73,63 +67,34 @@ export function FileItem({
         }
     };
 
-    if (viewType === "list") {
-        return (
-            <tr
-                className={`hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors ${
-                    type === "folder" ? "cursor-pointer" : ""
-                }`}
-                onClick={type === "folder" ? onClick : undefined}
-            >
-                <td className="p-4 align-middle">
-                    <div className="flex items-center gap-2">
-                        {getIcon()}
-                        {type === "folder" ? (
-                            <span>{name}</span>
-                        ) : (
-                            <Link
-                                href={url}
-                                className="text-primary hover:underline"
-                                onClick={(e) => e.stopPropagation()}
-                            >
-                                {name}
-                            </Link>
-                        )}
-                    </div>
-                </td>
-                <td className="text-muted-foreground p-4 align-middle">
-                    {modified ?? "-"}
-                </td>
-                <td className="text-muted-foreground p-4 align-middle">
-                    {size ?? "-"}
-                </td>
-            </tr>
-        );
-    }
-
-    // Grid view (keeping for reference)
-    const content = (
-        <div
-            className="hover:bg-accent flex cursor-pointer flex-col items-center rounded-lg border p-4 text-center transition-colors"
-            onClick={onClick}
+    return (
+        <tr
+            className={`hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors ${
+                driveItem.type === "folder" ? "cursor-pointer" : ""
+            }`}
+            onClick={driveItem.type === "folder" ? onFolderClick : undefined}
         >
-            {getIcon()}
-            <div className="mt-2 w-full">
-                <p className="truncate font-medium" title={name}>
-                    {name}
-                </p>
-                {modified && (
-                    <p className="text-muted-foreground mt-1 text-xs">
-                        {modified}
-                    </p>
-                )}
-            </div>
-        </div>
+            <td className="p-4 align-middle">
+                <div className="flex items-center gap-2">
+                    {getIcon()}
+                    {driveItem.type === "folder" ? (
+                        <span>{driveItem.name}</span>
+                    ) : (
+                        <a
+                            href={driveItem.url}
+                            target="_blank"
+                            className="text-primary hover:underline"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {driveItem.name}
+                        </a>
+                    )}
+                </div>
+            </td>
+            <td className="text-muted-foreground p-4 align-middle">{"-"}</td>
+            <td className="text-muted-foreground p-4 align-middle">
+                {driveItem.size ?? "-"}
+            </td>
+        </tr>
     );
-
-    if (type === "folder") {
-        return content;
-    }
-
-    return <Link href={url}>{content}</Link>;
 }
