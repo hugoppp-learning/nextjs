@@ -1,5 +1,3 @@
-"use client"
-
 import {Avatar, AvatarFallback, AvatarImage} from "~/components/ui/avatar"
 import {Button} from "~/components/ui/button"
 import {Input} from "~/components/ui/input"
@@ -17,14 +15,12 @@ import {useTheme} from "next-themes"
 import type {DriveItem} from "~/lib/mock-data"
 
 interface HeaderProps {
-    searchQuery: string
-    setSearchQuery: (query: string) => void
     breadcrumbItems: DriveItem[]
     navigateUp: () => void
     navigateTo: (id: string | null) => void
 }
 
-export function Header({searchQuery, setSearchQuery, breadcrumbItems, navigateUp, navigateTo}: HeaderProps) {
+export function Header({breadcrumbItems, navigateUp, navigateTo}: HeaderProps) {
     return (
         <header className="border-b p-4">
             <div className="flex items-center justify-between">
@@ -67,8 +63,6 @@ export function Header({searchQuery, setSearchQuery, breadcrumbItems, navigateUp
                             type="search"
                             placeholder="Search in Drive"
                             className="pl-8"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
                 </div>

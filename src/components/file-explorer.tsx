@@ -1,4 +1,3 @@
-"use client"
 import {ScrollArea} from "~/components/ui/scroll-area"
 import {FileItem} from "~/components/file-item"
 import type {DriveItem} from "~/lib/mock-data"
@@ -6,7 +5,6 @@ import type {DriveItem} from "~/lib/mock-data"
 interface FileExplorerProps {
     items: DriveItem[]
     navigateToFolder: (folderId: string) => void
-    navigateUp: () => void
 }
 
 export function FileExplorer({items, navigateToFolder}: FileExplorerProps) {
