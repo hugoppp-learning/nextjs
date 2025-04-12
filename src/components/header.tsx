@@ -12,12 +12,12 @@ import {
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu"
 import {useTheme} from "next-themes"
-import type {DriveItem} from "~/lib/mock-data"
+import type {DriveFolder} from "~/lib/mock-data"
 
 interface HeaderProps {
-    breadcrumbItems: DriveItem[]
+    breadcrumbItems: DriveFolder[]
     navigateUp: () => void
-    navigateTo: (id: string | null) => void
+    navigateTo: (id: number) => void
 }
 
 export function Header({breadcrumbItems, navigateUp, navigateTo}: HeaderProps) {
@@ -26,19 +26,20 @@ export function Header({breadcrumbItems, navigateUp, navigateTo}: HeaderProps) {
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                     <div className="flex items-center">
-                        <Button variant="ghost" size="sm" onClick={navigateUp} className="mr-1">
+                        <Button disabled={breadcrumbItems.length === 1} variant="ghost" size="sm" onClick={navigateUp}
+                                className="mr-1">
                             <ChevronRight className="h-4 w-4 rotate-180"/>
                         </Button>
                         <nav className="flex items-center">
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => navigateTo(null)}
+                                onClick={() => navigateTo(breadcrumbItems[0]!.id)}
                                 className="font-medium hover:bg-accent hover:text-accent-foreground"
                             >
                                 My Drive
                             </Button>
-                            {breadcrumbItems.map((item, index) => (
+                            {breadcrumbItems.slice(1).map((item, index) => (
                                 <div key={item.id} className="flex items-center">
                                     <ChevronRight className="h-4 w-4 mx-1 text-muted-foreground"/>
                                     <Button

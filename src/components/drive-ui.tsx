@@ -3,30 +3,27 @@
 import {useState} from "react"
 import {Header} from "~/components/header"
 import {FileExplorer} from "~/components/file-explorer"
-import {getItemById, getItemsByParentId, getPathToItem} from "~/lib/mock-data"
+import {getFilesInFolder, getFolderById, getFoldersInFolder, getPathToItem} from "~/lib/mock-data"
 
 export function DriveUI() {
-  const [currentFolderId, setCurrentFolderId] = useState<string | null>(null)
+    const [currentFolderId, setCurrentFolderId] = useState<number>(1)
 
-  const currentItems = getItemsByParentId(currentFolderId)
+    const currentFiles = getFilesInFolder(currentFolderId)
+    const currentFolders = getFoldersInFolder(currentFolderId)
 
   // Get path to current folder
   const breadcrumbItems = currentFolderId ? getPathToItem(currentFolderId) : []
 
-  const navigateToFolder = (folderId: string) => {
-    setCurrentFolderId(folderId)
-  }
-
-  // Navigate up one level
   const navigateUp = () => {
     if (currentFolderId) {
-      const currentFolder = getItemById(currentFolderId)
-      setCurrentFolderId(currentFolder?.parentId ?? null)
+        const currentFolder = getFolderById(currentFolderId)
+        if (!currentFolder?.parentId) return
+        setCurrentFolderId(currentFolder.parentId)
     }
   }
 
   // Navigate to a specific point in the breadcrumb
-  const navigateTo = (id: string | null) => {
+    const navigateTo = (id: number) => {
     setCurrentFolderId(id)
   }
 
@@ -37,7 +34,7 @@ export function DriveUI() {
             navigateUp={navigateUp}
             navigateTo={navigateTo}
         />
-        <FileExplorer items={currentItems} navigateToFolder={navigateToFolder}/>
+          <FileExplorer files={currentFiles} folders={currentFolders} navigateToFolder={setCurrentFolderId}/>
       </div>
   )
 }

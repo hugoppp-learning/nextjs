@@ -1,182 +1,78 @@
-import type {FileItemProps} from "~/components/file-item"
-
-export interface DriveItem extends FileItemProps {
-  id: string
-  parentId: string | null
+export type DriveFile = {
+    id: number;
+    parentId: number;
+    name: string;
+    size: string;
+    url: string;
 }
 
-// Flat data structure with parent references
-export const mockData: DriveItem[] = [
-  // Root items (parentId = null)
-  {
-    id: "work-documents",
-    name: "Work Documents",
-    type: "folder",
-    modified: "Modified Apr 10, 2023",
-    parentId: null,
-  },
-  {
-    id: "personal",
-    name: "Personal",
-    type: "folder",
-    modified: "Modified Apr 2, 2023",
-    parentId: null,
-  },
-  {
-    id: "project-presentation",
-    name: "Project Presentation.pptx",
-    type: "document",
-    size: "5.7 MB",
-    modified: "Modified Apr 9, 2023",
-    url: "#",
-    parentId: null,
-  },
-  {
-    id: "financial-report",
-    name: "Financial Report.xlsx",
-    type: "spreadsheet",
-    size: "2.1 MB",
-    modified: "Modified Apr 7, 2023",
-    url: "#",
-    parentId: null,
-  },
-  {
-    id: "website-mockup",
-    name: "Website Mockup.png",
-    type: "image",
-    size: "4.3 MB",
-    modified: "Modified Apr 6, 2023",
-    url: "#",
-    parentId: null,
-  },
-  {
-    id: "source-code",
-    name: "Source Code.zip",
-    type: "archive",
-    size: "12.8 MB",
-    modified: "Modified Apr 3, 2023",
-    url: "#",
-    parentId: null,
-  },
-  {
-    id: "app-js",
-    name: "App.js",
-    type: "code",
-    size: "15 KB",
-    modified: "Modified Apr 2, 2023",
-    url: "#",
-    parentId: null,
-  },
+export type DriveFolder = {
+    id: number;
+    parentId: number | null;
+    name: string;
+};
 
-  // Work Documents children
-  {
-    id: "project-proposal",
-    name: "Project Proposal.docx",
-    type: "document",
-    size: "2.3 MB",
-    modified: "Modified Apr 8, 2023",
-    url: "#",
-    parentId: "work-documents",
-  },
-  {
-    id: "budget-2023",
-    name: "Budget 2023.xlsx",
-    type: "spreadsheet",
-    size: "1.8 MB",
-    modified: "Modified Apr 5, 2023",
-    url: "#",
-    parentId: "work-documents",
-  },
-  {
-    id: "meeting-notes",
-    name: "Meeting Notes",
-    type: "folder",
-    modified: "Modified Mar 28, 2023",
-    parentId: "work-documents",
-  },
 
-  // Meeting Notes children
-  {
-    id: "q1-review",
-    name: "Q1 Review.docx",
-    type: "document",
-    size: "1.2 MB",
-    modified: "Modified Mar 28, 2023",
-    url: "#",
-    parentId: "meeting-notes",
-  },
-  {
-    id: "team-sync",
-    name: "Team Sync.docx",
-    type: "document",
-    size: "0.9 MB",
-    modified: "Modified Mar 25, 2023",
-    url: "#",
-    parentId: "meeting-notes",
-  },
+export const folders: DriveFolder[] = [
+    {id: 1, parentId: null, name: ""},
+    {id: 2, parentId: 1, name: "Documents"},
+    {id: 3, parentId: 1, name: "Pictures"},
+    {id: 4, parentId: 2, name: "Work"},
+    {id: 5, parentId: 2, name: "Personal"},
+    {id: 6, parentId: 3, name: "Vacations"}
+];
 
-  // Personal children
-  {
-    id: "vacation-photos",
-    name: "Vacation Photos",
-    type: "folder",
-    modified: "Modified Apr 1, 2023",
-    parentId: "personal",
-  },
-  {
-    id: "resume",
-    name: "Resume.pdf",
-    type: "document",
-    size: "1.5 MB",
-    modified: "Modified Mar 15, 2023",
-    url: "#",
-    parentId: "personal",
-  },
 
-  // Vacation Photos children
-  {
-    id: "beach-sunset",
-    name: "Beach Sunset.jpg",
-    type: "image",
-    size: "3.2 MB",
-    modified: "Modified Apr 1, 2023",
-    url: "#",
-    parentId: "vacation-photos",
-  },
-  {
-    id: "mountain-view",
-    name: "Mountain View.jpg",
-    type: "image",
-    size: "2.8 MB",
-    modified: "Modified Mar 31, 2023",
-    url: "#",
-    parentId: "vacation-photos",
-  },
-]
+export const files: DriveFile[] = [
+    {id: 1, parentId: 2, name: "resume.docx", size: "20KB", url: "/Documents/resume.docx"},
+    {id: 2, parentId: 2, name: "budget.xlsx", size: "15KB", url: "/Documents/budget.xlsx"},
+    {id: 3, parentId: 4, name: "project-plan.pdf", size: "50KB", url: "/Documents/Work/project-plan.pdf"},
+    {id: 4, parentId: 4, name: "presentation.pptx", size: "30KB", url: "/Documents/Work/presentation.pptx"},
+    {id: 5, parentId: 5, name: "diary.txt", size: "5KB", url: "/Documents/Personal/diary.txt"},
+    {id: 6, parentId: 3, name: "family-photo.jpg", size: "2MB", url: "/Pictures/family-photo.jpg"},
+    {id: 7, parentId: 6, name: "beach.jpg", size: "3MB", url: "/Pictures/Vacations/beach.jpg"},
+    {id: 8, parentId: 6, name: "mountain.jpg", size: "2.5MB", url: "/Pictures/Vacations/mountain.jpg"},
+    {id: 9, parentId: 1, name: "instructions.txt", size: "10KB", url: "/instructions.txt"},
+    {id: 10, parentId: 3, name: "thumbnail.png", size: "1MB", url: "/Pictures/thumbnail.png"}
+];
+
+
 
 // Helper function to get items by parent ID
-export function getItemsByParentId(parentId: string | null): DriveItem[] {
-  return mockData.filter((item) => item.parentId === parentId)
+export function getFilesInFolder(folderId: number): DriveFile[] {
+    return files.filter((item) => item.parentId === folderId)
 }
 
-// Helper function to get item by ID
-export function getItemById(id: string): DriveItem | undefined {
-  return mockData.find((item) => item.id === id)
+export function getFoldersInFolder(folderId: number): DriveFolder[] {
+    return folders.filter((item) => item.parentId === folderId)
+}
+
+export function getFileById(id: number): DriveFile | undefined {
+    return files.find(f => f.id == id)
+}
+
+export function getFolderById(id: number): DriveFolder | undefined {
+    return folders.find(f => f.id == id);
 }
 
 // Helper function to get path to an item
-export function getPathToItem(id: string): DriveItem[] {
-  const path: DriveItem[] = []
-  let currentItem = getItemById(id)
+export function getPathToItem(id: number): DriveFolder[] {
+    const path: DriveFolder[] = []
 
-  while (currentItem) {
-    path.unshift(currentItem)
-    if (currentItem.parentId) {
-      currentItem = getItemById(currentItem.parentId)
-    } else {
-      break
+    const currentFile = getFileById(id)
+    if (currentFile == undefined)
+        return [];
+
+    let currentFolder: DriveFolder | undefined = getFolderById(currentFile.id)
+
+    while (currentFolder) {
+        path.unshift(currentFolder)
+        if (currentFolder.parentId) {
+            currentFolder = getFolderById(currentFolder.parentId)
+        } else {
+            break
+        }
     }
-  }
 
-  return path
+    return path
 }

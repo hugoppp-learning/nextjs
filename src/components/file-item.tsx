@@ -5,7 +5,7 @@ import {File, FileArchive, FileCode, FileSpreadsheet, FileText, Folder, ImageIco
 
 export interface FileItemProps {
     name: string
-    type: "folder" | "document" | "image" | "code" | "spreadsheet" | "archive" | "other"
+    type: "folder" | "file"
     size?: string
     modified?: string
     shared?: boolean
@@ -16,23 +16,47 @@ export interface FileItemProps {
 
 export function FileItem({name, type, size, modified, url = "#", onClick, viewType = "grid"}: FileItemProps) {
     const getIcon = () => {
-        switch (type) {
-            case "folder":
-                return <Folder className="h-5 w-5 text-blue-500"/>
-            case "document":
+
+        if (type === "folder")
+            return <Folder className="h-5 w-5 text-blue-500"/>
+
+        const extension = name.split('.').pop()?.toLowerCase();
+        switch (extension) {
+            case "txt":
+            case "doc":
+            case "docx":
+            case "pdf":
                 return <FileText className="h-5 w-5 text-blue-600"/>
-            case "image":
+            case "jpg":
+            case "jpeg":
+            case "png":
+            case "gif":
+            case "bmp":
+            case "svg":
                 return <ImageIcon className="h-5 w-5 text-green-500"/>
-            case "code":
+            case "js":
+            case "jsx":
+            case "ts":
+            case "tsx":
+            case "html":
+            case "css":
+            case "json":
+            case "xml":
                 return <FileCode className="h-5 w-5 text-purple-500"/>
-            case "spreadsheet":
+            case "xls":
+            case "xlsx":
+            case "csv":
                 return <FileSpreadsheet className="h-5 w-5 text-green-600"/>
-            case "archive":
+            case "zip":
+            case "rar":
+            case "7z":
+            case "tar":
+            case "gz":
                 return <FileArchive className="h-5 w-5 text-yellow-600"/>
             default:
                 return <File className="h-5 w-5 text-gray-500"/>
         }
-    }
+    };
 
     if (viewType === "list") {
         return (
