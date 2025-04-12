@@ -1,7 +1,7 @@
-import {int, singlestoreTable, varchar} from 'drizzle-orm/singlestore-core';
+import { int, singlestoreTable, varchar } from "drizzle-orm/singlestore-core";
 
-export const usersTable = singlestoreTable('users_table', {
+export const usersTable = singlestoreTable("users_table", {
     id: int().primaryKey().autoincrement(),
-    name: varchar({length: 255}).notNull(),
+    name: varchar({ length: 255 }).notNull(),
     age: int().notNull(),
 });

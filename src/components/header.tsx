@@ -1,8 +1,16 @@
-import {Avatar, AvatarFallback, AvatarImage} from "~/components/ui/avatar"
-import {Button} from "~/components/ui/button"
-import {Input} from "~/components/ui/input"
-import {ChevronRight, Grid, List, Moon, Search, Settings, Sun} from "lucide-react"
-import {UploadButton} from "~/components/upload-button"
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import {
+    ChevronRight,
+    Grid,
+    List,
+    Moon,
+    Search,
+    Settings,
+    Sun,
+} from "lucide-react";
+import { UploadButton } from "~/components/upload-button";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -10,44 +18,60 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu"
-import {useTheme} from "next-themes"
-import type {DriveFolder} from "~/lib/mock-data"
+} from "~/components/ui/dropdown-menu";
+import { useTheme } from "next-themes";
+import type { DriveFolder } from "~/lib/mock-data";
 
 interface HeaderProps {
-    breadcrumbItems: DriveFolder[]
-    navigateUp: () => void
-    navigateTo: (id: number) => void
+    breadcrumbItems: DriveFolder[];
+    navigateUp: () => void;
+    navigateTo: (id: number) => void;
 }
 
-export function Header({breadcrumbItems, navigateUp, navigateTo}: HeaderProps) {
+export function Header({
+    breadcrumbItems,
+    navigateUp,
+    navigateTo,
+}: HeaderProps) {
     return (
         <header className="border-b p-4">
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                     <div className="flex items-center">
-                        <Button disabled={breadcrumbItems.length === 1} variant="ghost" size="sm" onClick={navigateUp}
-                                className="mr-1">
-                            <ChevronRight className="h-4 w-4 rotate-180"/>
+                        <Button
+                            disabled={breadcrumbItems.length === 1}
+                            variant="ghost"
+                            size="sm"
+                            onClick={navigateUp}
+                            className="mr-1"
+                        >
+                            <ChevronRight className="h-4 w-4 rotate-180" />
                         </Button>
                         <nav className="flex items-center">
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => navigateTo(breadcrumbItems[0]!.id)}
-                                className="font-medium hover:bg-accent hover:text-accent-foreground"
+                                onClick={() =>
+                                    navigateTo(breadcrumbItems[0]!.id)
+                                }
+                                className="hover:bg-accent hover:text-accent-foreground font-medium"
                             >
                                 My Drive
                             </Button>
                             {breadcrumbItems.slice(1).map((item, index) => (
-                                <div key={item.id} className="flex items-center">
-                                    <ChevronRight className="h-4 w-4 mx-1 text-muted-foreground"/>
+                                <div
+                                    key={item.id}
+                                    className="flex items-center"
+                                >
+                                    <ChevronRight className="text-muted-foreground mx-1 h-4 w-4" />
                                     <Button
                                         variant="ghost"
                                         size="sm"
                                         onClick={() => navigateTo(item.id)}
-                                        className={`font-medium hover:bg-accent hover:text-accent-foreground ${
-                                            index === breadcrumbItems.length - 1 ? "text-primary" : ""
+                                        className={`hover:bg-accent hover:text-accent-foreground font-medium ${
+                                            index === breadcrumbItems.length - 1
+                                                ? "text-primary"
+                                                : ""
                                         }`}
                                     >
                                         {item.name}
@@ -57,9 +81,9 @@ export function Header({breadcrumbItems, navigateUp, navigateTo}: HeaderProps) {
                         </nav>
                     </div>
                 </div>
-                <div className="flex-1 mx-10 max-w-xl">
+                <div className="mx-10 max-w-xl flex-1">
                     <div className="relative">
-                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"/>
+                        <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
                         <Input
                             type="search"
                             placeholder="Search in Drive"
@@ -68,52 +92,58 @@ export function Header({breadcrumbItems, navigateUp, navigateTo}: HeaderProps) {
                     </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <UploadButton/>
+                    <UploadButton />
                     <Button variant="ghost" size="icon">
-                        <List className="h-4 w-4"/>
+                        <List className="h-4 w-4" />
                     </Button>
                     <Button variant="ghost" size="icon">
-                        <Grid className="h-4 w-4"/>
+                        <Grid className="h-4 w-4" />
                     </Button>
-                    <SettingsDropdown/>
+                    <SettingsDropdown />
                     <Avatar>
-                        <AvatarImage src="/placeholder-user.jpg"/>
+                        <AvatarImage src="/placeholder-user.jpg" />
                         <AvatarFallback>JD</AvatarFallback>
                     </Avatar>
                 </div>
             </div>
         </header>
-    )
+    );
 }
 
 function SettingsDropdown() {
-    const {theme, setTheme} = useTheme()
+    const { theme, setTheme } = useTheme();
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon">
-                    <Settings className="h-4 w-4"/>
+                    <Settings className="h-4 w-4" />
                     <span className="sr-only">Settings</span>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => setTheme("light")} className="flex items-center justify-between py-2">
+                <DropdownMenuItem
+                    onClick={() => setTheme("light")}
+                    className="flex items-center justify-between py-2"
+                >
                     <div className="flex items-center">
-                        <Sun className="mr-2 h-4 w-4"/>
+                        <Sun className="mr-2 h-4 w-4" />
                         <span>Light Mode</span>
                     </div>
                     {theme === "light" && <span>✓</span>}
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("dark")} className="flex items-center justify-between py-2">
+                <DropdownMenuItem
+                    onClick={() => setTheme("dark")}
+                    className="flex items-center justify-between py-2"
+                >
                     <div className="flex items-center">
-                        <Moon className="mr-2 h-4 w-4"/>
+                        <Moon className="mr-2 h-4 w-4" />
                         <span>Dark Mode</span>
                     </div>
                     {theme === "dark" && <span>✓</span>}
                 </DropdownMenuItem>
-                <DropdownMenuSeparator/>
+                <DropdownMenuSeparator />
                 <DropdownMenuLabel>Settings</DropdownMenuLabel>
                 <DropdownMenuItem className="py-2">
                     <span>Preferences</span>
@@ -123,5 +153,5 @@ function SettingsDropdown() {
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
-    )
+    );
 }
